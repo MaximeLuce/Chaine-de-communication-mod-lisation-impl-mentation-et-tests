@@ -23,5 +23,5 @@ function [MessageEncode, dictionnaire, probas] = huffmanUniverselCod(message, sy
     
     % Étape 2: Remplacer ces cellules vides par un espace
     decodedCell(indexVides) = {' '};
-    MessageDecode = [decodedCell{:}];                % concatène en 'exemple'
+    MessageDecode = [decodedCell{:}]';                % concatène en 'exemple'
 end
