@@ -1,0 +1,51 @@
+
+function [MessageDecode, dictionnaire, probas] = huffmanUniverselDecod(MessageEncode, symbolsCell, probas)
+    % Huffman encode pour un message (chaîne de caractères)
+    % Entrée: message - 1xN char (ex : 'exemple')
+    % Sorties: encodedMessage - vecteur binaire (0/1)
+    %         dictionnaire - chaîne décodée (char)
+    % probas
+
+ 
+    dictionnaire = huffmandict(symbolsCell, probas);
+    
+    codesConnus = dictionnaire(:,2)
+sequenceRemplacement = [0 1 0 1 0 1 1 0 0 1 1 1];
+
+% Vérifier si messageEncode correspond à l'un des codes connus
+trouve = false;
+for i = 1:numel(codesConnus)
+    if isequal(messageEncode, codesConnus{i})
+        trouve = true;
+        break;
+    end
+end
+
+% Remplacement si non trouvé
+if ~trouve
+    messageEncode = sequenceRemplacement;
+end
+
+    % Décoder et reconstituer la chaîne
+    decodedCell = huffmandeco(MessageEncode, dictionnaire) % retourne {'e','x',...}
+    % Étape 1: Trouver les index de toutes les cellules qui sont vides
+    indexVides = cellfun('isempty', decodedCell);
+    
+    % Étape 2: Remplacer ces cellules vides par un espace
+    decodedCell(indexVides) = {' '};
+    MessageDecode = [decodedCell{:}];  % concatène en 'exemple'
+end
+
+function [decoded] = afficherSymbInc(MessageEncode, dictionnaire)
+    decoded = cell(size(MessageEncode));
+
+    for i = 1:length(MessageEncode)
+        code = MessageEncode{i};
+        idx = find(strcmp(dict(:,2), code));
+        if isempty(idx)
+            decoded{i} = '?';  % Valeur par défaut
+        else
+            decoded{i} = dict{idx,1};
+        end
+    end
+end
