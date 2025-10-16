@@ -17,7 +17,7 @@ addpath demodulation\;
 parametres; % on importe les paramètres de parametres.m
 
 %% SOURCE PRINCIPALE
-m='Coucou';
+m='test';
 
 disp('Message original:');
 disp(m);
@@ -39,18 +39,23 @@ messageFiltre = verifCaractere(m)
 disp("Message codé");
 disp(MessageEncode');
 
+
 %% CODAGE DE CANAL
 
 disp("Message en sortie du codage canal");
 [MessageCodeCanal, doublon] = codageCanal(MessageEncode);
 disp(MessageCodeCanal)
-%% MODULATION
 
-%% PERTURBATION : BABG
+size(MessageCodeCanal)
+%% MODULATION + Ajout du bruit
+% DEBIT + bande passante + puissance de x (fixée)
+%y = modulationQPSK(MessageCodeCanal)
 
+%size(y)
 
 %% DEMODULATION
 
+%Y = demodulationQPSK(y)
 
 %% CANAL D'INFORMATION - CBS
 
@@ -61,9 +66,11 @@ Pe = 0;
 C_CBS = 1 - H2(Pe); % calcul de la capacité du canal d'information
 
 MessageY = applicationCBS(MessageCodeCanal, Pe);
-%T2 = table(mC, MessageY)
+%T2 = table(mC, MessageY)<
 
 %% DECODAGE CANAL
+% on l'applique à Y (qui provient de la mod/demod) ou à MessageY (qui
+% provient du CBS)
 disp("Message en sortie du décodage canal")
 MessageDecodeCanal = decodageCanal(MessageY, doublon);
 disp(MessageDecodeCanal')

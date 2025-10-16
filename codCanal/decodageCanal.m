@@ -1,6 +1,5 @@
 function [messageDecode] = decodageCanal(messageCode, doublon)
-    % on retir les 0 ajoutés artificiellements
-    messageCode = messageCode(1,1:end-doublon);
+
 
     messageDecode = [];
     H = [1 0 1 0 1 0 1; 0 1 1 0 0 1 1; 0 0 0 1 1 1 1];
@@ -11,7 +10,7 @@ function [messageDecode] = decodageCanal(messageCode, doublon)
     r = mod(n,7);
     nbBlocs = (n-r)/7;
 
-    for i=1:nbBlocs+1
+    for i=1:nbBlocs
         debut = (i-1)*7 + 1;
         fin = min(i*7, n);
         message = messageCode(debut:fin);
@@ -34,8 +33,17 @@ function [messageDecode] = decodageCanal(messageCode, doublon)
             end
         end
         % on décode le message corrigé
-        u = [corrige(3); corrige(5); corrige(6); corrige(7)];
-       
+        % on retir les 0 ajoutés artificiellements
+        %messageCode = messageCode(1,1:end-doublon);
+        if i == nbBlocs
+            if doublon == 1
+                u = [corrige(3); corrige(5); corrige(6)];
+            else
+                u = [corrige(3); corrige(5); corrige(6); corrige(7)];
+            end
+        else
+            u = [corrige(3); corrige(5); corrige(6); corrige(7)];
+        end
         % on ajoute le mot au messageDecode
         messageDecode = [messageDecode ; u];
     end
