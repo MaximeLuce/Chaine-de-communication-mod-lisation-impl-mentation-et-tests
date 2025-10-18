@@ -53,7 +53,7 @@ y = modulationQPSK(MessageCodeCanal);
 
 %% DEMODULATION
 
-Y = demodulationQPSK(y)
+Y = demodulationQPSK(y);
 
 %% CANAL D'INFORMATION - CBS
 

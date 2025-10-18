@@ -22,7 +22,7 @@ function [Y] = demodulationQPSK(y)
     uz = uznus(k);
     
     function [d] = distance(x1, y1, x2, y2)
-        d = (x1 - x2)^2 + (y1 - y2)^2;
+        d = sqrt((x1 - x2)^2 + (y1 - y2)^2);
     end
     
     function [min] = decision(x1,y1) % renvoie en sortie 0,1,2,3 selon le pt le plus proche
