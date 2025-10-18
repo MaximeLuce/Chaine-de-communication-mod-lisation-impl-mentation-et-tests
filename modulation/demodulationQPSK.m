@@ -41,5 +41,5 @@ function [Y] = demodulationQPSK(y)
         nphaseprime(i+1) = decision(real(uz(i+1)),imag(uz(i+1)));
     end
     
-    mprime = str2num(reshape(dec2bin(nphaseprime)',2*Nsymb,1))'
+    Y = str2num(reshape(dec2bin(nphaseprime,2)',2*Nsymb,1))';
 end

@@ -19,11 +19,10 @@ function [z] = modulationQPSK(m)
     u_ups = repelem(ux, nrepet); % donne la forme rectangulaire
     Ntot = numel(u_ups);
     t = (0:Ntot-1)*Ts;
+
     
     x = real(u_ups).*cos(2*pi*fp*t) - imag(u_ups).*sin(2*pi*fp*t);
     
-    % Canal sans bruit
-    
-    sigma2 = 50/50;
-    z = x+sqrt(sigma2)*randn(1,length(x)); % BRUIT !!!
+    sigma2 = 0.5;
+    z = x +sqrt(sigma2)*randn(1,length(x)); % BRUIT !!!
 end
