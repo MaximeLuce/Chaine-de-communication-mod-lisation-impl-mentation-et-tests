@@ -1,3 +1,5 @@
+
+
 function [messageDecode] = decodageCanal(messageCode, doublon)
 
 
@@ -34,7 +36,7 @@ function [messageDecode] = decodageCanal(messageCode, doublon)
             end
         end
         % on décode le message corrigé
-        % on retir les 0 ajoutés artificiellements
+        % on retire les 0 ajoutés artificiellements
         %messageCode = messageCode(1,1:end-doublon);
         if i == nbBlocs
             if doublon == 1

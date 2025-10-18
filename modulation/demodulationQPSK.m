@@ -1,18 +1,22 @@
+
 function [Y] = demodulationQPSK(y)
     nus = 1000;   % Hz
     fp = 200;    % Hz
     Db = 200;    % bits/s
     A = 1;
 
-    
-    
     Ts = 1/nus;    
     iim = 1i;
     t = (0:length(y)-1)*Ts;
+
+    Rs = Db/2;
+    nrepet = round(nus/Rs);
+    Ntot = floor(numel(y)/nrepet)*nrepet;
+    Nsymb = Ntot / nrepet;
     
     % Démodulation IQ via signal analytique + mélange
     uznus = hilbert(y).*exp(-iim*2*pi*fp*t);  % enveloppe complexe échantillonnée à nus
-    
+
     % Prélèvement au centre de chaque symbole
     k  = (nrepet/2) : nrepet : Ntot;          % suppose nrepet pair ; sinon, floor(...)
     uz = uznus(k);

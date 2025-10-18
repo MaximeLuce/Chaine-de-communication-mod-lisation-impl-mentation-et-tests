@@ -24,6 +24,6 @@ function [z] = modulationQPSK(m)
     
     % Canal sans bruit
     
-    sigma2 = 20/50;
+    sigma2 = 50/50;
     z = x+sqrt(sigma2)*randn(1,length(x)); % BRUIT !!!
 end
