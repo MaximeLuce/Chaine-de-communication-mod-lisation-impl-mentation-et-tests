@@ -1,8 +1,8 @@
 function [messageRobuste, doublon] = codageCanalH_7_2(message)
-    G = [1 0 1 0 1 0 1 0 1 0 1 0 1 0 1; 0 1 0 1 0 1 0 1 0 1 0 1 0 1 1];
+    G = [1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1; 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 1];
 
     % S'assure que 'message' est un vecteur ligne binaire
-    message = message(:).'; 
+    message = message(:).';
     lMessage = numel(message);
 
     [k, n] = size(G);

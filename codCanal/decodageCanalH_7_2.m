@@ -1,6 +1,6 @@
 
 function [messageDecode] = decodageCanalH_7_2(messageCode, doublon)
-    G = [1 0 1 0 1 0 1 0 1 0 1 0 1 0 1; 0 1 0 1 0 1 0 1 0 1 0 1 0 1 1];
+    G = [1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1; 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 1];
 
     messageCode = messageCode(:).';
 
@@ -29,9 +29,9 @@ function [d] = distance(x,y)
 end
 
 function [corrige] = correction(element)
-    l_possibles = [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 1 0 1 0 1 0 1 0 1 0 1 0 1 1; 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1; 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0]; % dépend de G
-    corrige = [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]; % initialisé par le premier terme
-    d_min = 15;
+    l_possibles = [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 1; 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1; 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0]; % dépend de G
+    corrige = [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]; % initialisé par le premier terme
+    d_min = 29;
 
     for i=1:4
         dist = distance(l_possibles(i,:),element);
