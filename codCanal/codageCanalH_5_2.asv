@@ -35,17 +35,12 @@ end
 
 
 % Fonction intervenant dans codageCanal servant à coder les bits d'entrée
-%
 % Entrées : bits => matrice ligne contenant les bits à coder. Sera remis en
-%           forme via reshape puis remis sous format ligne 
-%           G => matrice génératrice
-%
-% Sorties : code => matrice ligne contenant bits codé via la génératrice G
-
+% forme via reshape
 function code = codage(bits, G)
-    [k, n] = size(G);                   % k = nb de bits par bloc
-    blocs = reshape(bits, k, [])';      % découpe en blocs de k bits
-    code = mod(blocs * G, 2)';          % multiplication binaire via mod
-    code = code(:)';                    % remise en forme ligne de code
+    [k, n] = size(G); % k = nb bits d'entrée
+    blocs = reshape(bits, k, [])'; % découpe en blocs de k bits
+    code = mod(blocs * G, 2)'; % multiplication binaire
+    code = code(:)';
 end
 

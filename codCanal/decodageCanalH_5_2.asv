@@ -53,38 +53,29 @@ end
 % des erreurs, de récupérer le message envoyé avant le canal de manière la
 % plus précise possible.
 %
-% Entrées : messageCode => matrice ligne contenant le message reçu en 
-%           sortie de canal, renforcé
-%           doublon => valeur valant 1 si la longueur du message envoyé est
-%           impaire
+% Entrées : messageCode => 
 %
-% Sorties : messageDecode => message décodé et corrigé via H(5,2) et G
-%           donné
+% Sorties : corrige => élément le plus proche de la liste l_possibles
 
 function [messageDecode] = decodageCanal(messageCode, doublon)
-    G = [1 0 1 0 1; 0 1 0 1 1];     % Matrice génératrice
+    G = [1 0 1 0 1; 0 1 0 1 1];
 
     messageCode = messageCode(:).';
 
     [k, n] = size(G);
     l = numel(messageCode);
     nbBlocs = floor(l/n);
-
-    M = reshape(messageCode, n, [])'; % Remise en forme du msg pour correction
+    M = reshape(messageCode, n, [])';
     Mcorr = zeros(nbBlocs,n);
     messageDecode = [];
 
     for i=1:nbBlocs
         Mcorr(i,:) = correction(M(i,:));
         messageDecode = [messageDecode Mcorr(i,1) Mcorr(i,2)];
-        % Récupération des deux premiers termes (I2 dans G), qui
-        % correspondent aux deux bits envoyés en entrée. A modifier si G
-        % est changée
     end
 
     if doublon == 1
-        messageDecode = messageDecode(1:end-1); % Supprime le dernier bit
-        % en cas de longueur envoyée impaire
+        messageDecode = messageDecode(1:end-1);
     end
 end
 

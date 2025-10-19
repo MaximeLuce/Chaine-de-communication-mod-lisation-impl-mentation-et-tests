@@ -1,18 +1,40 @@
+%% CODAGE DU CANAL H(7,4)
+
+% Fonction appliquant le codage canal H(7,4) sur le message entré. Découpe
+% le message selon des morceaux de longueur k et code les blocs avant de
+% les assembler à nouveau
+%
+% Entrées : message => matrice quelconque binaire contenant le message
+%
+% Sorties : messageRobuste => matrice ligne binaire contenant le msg robuste
+%           doublon => vaut 1 si le nb de bits du msg est impair. Dans ce
+%           cas, le codage canal ajoute un bit (ici 0) pour compléter le
+%           couple et le coder de la même façon
+
 function [messageRobuste, doublon] = codageCanal(message)
     n = 7;
     k = 4;
     r = n - k;
-    G = [1 1 1 0 0 0 0; 1 0 0 1 1 0 0; 0 1 0 1 0 1 0; 1 1 0 1 0 0 1];
+
+    G = [1 1 1 0 0 0 0; 
+        1 0 0 1 1 0 0; 
+        0 1 0 1 0 1 0; 
+        1 1 0 1 0 0 1];
+
     lMessage = length(message);
 
     % on traite le cas si la longueur de message n'est pas un multiple de k=4
     if mod(lMessage, k) ~= 0 % si pas multiple
         message = [message; zeros(1,k- (lMessage-mod(lMessage, k))/k)]; % on complète avec des zéros
     end
+
     messageRobuste = codage(message, G);
     doublon = mod(lMessage, k);
 end
 
+% Fonction codée avant la découverte de l'existence de reshape. Ne sert
+% plus à rien, mais on se sentait trop bêtes après l'avoir découverte donc
+% on l'a gardée dans H(7,4)
 
 function [decoupe] = decoupage(octets) %les bits supp sont supposés appartenant à la chaine d'après
     l = length(octets);
@@ -24,9 +46,19 @@ function [decoupe] = decoupage(octets) %les bits supp sont supposés appartenant
     end
 end
 
-function [code] = codage(octets, G)
-    decoupe = decoupage(octets);
-    taille = floor(length(octets)/4);
+
+% Fonction intervenant dans codageCanal servant à coder les bits d'entrée
+%
+% Entrées : bits => matrice ligne contenant les bits à coder. Sera remis en
+%           forme via reshape puis remis sous format ligne 
+%           G => matrice génératrice
+%
+% Sorties : code => matrice ligne contenant bits codé via la génératrice G
+
+
+function [code] = codage(bits, G)
+    decoupe = decoupage(bits);
+    taille = floor(length(bits)/4);
     code = [];
     
     for i = 1:taille % remplissage de code

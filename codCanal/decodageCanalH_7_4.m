@@ -1,3 +1,15 @@
+%% DECODAGE DU CANAL H(7,4)
+
+% Fonction decodageCanal ramenant l'élément reçu et corrigeant via le 
+% syndrome calculé (syndrome valant, en binaire, la position de l'erreur).
+%
+% Entrées : messageCode => matrice ligne contenant le message reçu en 
+%           sortie de canal, renforcé
+%           doublon => valeur valant 1 si la longueur du message envoyé est
+%           impaire
+%
+% Sorties : messageDecode => élément le plus proche de la liste l_possibles
+
 function [messageDecode] = decodageCanal(messageCode, doublon)
 
 
