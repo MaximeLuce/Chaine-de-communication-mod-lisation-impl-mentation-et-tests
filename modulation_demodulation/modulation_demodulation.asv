@@ -1,0 +1,25 @@
+m = [1 1 1 0 0 0 0 1]
+
+nus = 1000;    % frequence d'echantillonnage (Hz)
+fp = 200;      % frequence porteuse (Hz)
+Db = 200;      % débit binaire (baud=1/sec)
+A = 1;         % amplitude du signal
+
+Ts = 1/nus;    % periode d'echantillonnage (sec)
+iim = sqrt(-1);
+
+Nsymb = Nbit/2; % nombre de symboles dans le message
+msymbole = reshape(m,2,Nsymb); % sequence de symbole (matrice 2*Nsymb)
+
+nphase = bin2dec(num2str(msymbole'))' % transposition de {00,01,10,11} vers {0,1,2,3}
+ux = A*exp(iim*2*pi*nphase/4+iim*pi/4)
+
+% Mise en forme du signal ux(t) : échantillonnage et débit symbole
+Ds = Db/2;              % debit symbole (1/sec)
+nrepet = 2; % facteur de repetition
+uxnus = reshape(ones(nrepet,1)*ux,1,Nsymb*nrepet) % chaque symbole est répété 'nrepet' fois
+
+% creation du signal réel x(t) à émettre : modulation IQ
+N = length(uxnus);
+t = [0:N-1]*Ts;
+x = real(uxnus).*cos(2*pi*fp*t)-imag(uxnus).*sin(2*pi*fp*t);

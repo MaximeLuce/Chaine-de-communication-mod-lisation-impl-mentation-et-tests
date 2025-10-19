@@ -1,8 +1,8 @@
 function [z] = modulationQPSK(m)
-    nus = 1000;   % Hz
-    fp = 200;    % Hz
-    Db = 200;    % bits/s
-    A = 1;
+    nus = 10000;    % frequence d'echantillonnage (Hz)
+    fp = 200;      % frequence porteuse (Hz)
+    Db = 200;      % débit binaire (baud=1/sec)
+    A = 1;         % amplitude du signal
     
     Ts = 1/nus;
     iim = 1i;
@@ -23,6 +23,6 @@ function [z] = modulationQPSK(m)
     
     x = real(u_ups).*cos(2*pi*fp*t) - imag(u_ups).*sin(2*pi*fp*t);
     
-    sigma2 = 0.5;
+    sigma2 = 0.8;
     z = x +sqrt(sigma2)*randn(1,length(x)); % BRUIT !!!
 end

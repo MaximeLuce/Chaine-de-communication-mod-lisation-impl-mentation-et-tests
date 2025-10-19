@@ -39,7 +39,7 @@ disp(MessageEncode);
 %% CODAGE DE CANAL
 
 disp("Message en sortie du codage canal");
-[MessageCodeCanal, doublon] = codageCanal(MessageEncode);
+[MessageCodeCanal, doublon] = codageCanalH_7_4(MessageEncode);
 disp(MessageCodeCanal)
 
 size(MessageCodeCanal)

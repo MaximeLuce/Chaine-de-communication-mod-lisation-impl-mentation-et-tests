@@ -21,14 +21,7 @@ function [dico] = unicite(message) % utile pour lzw
     dico = dico(2:end)
 end
 
-function [H] =CalculHP(proba) % entropie à partir des probas
-    n = length(proba);
-    H=0;
-    for i=1:n
-        H = H - proba(i)*log(proba(i));
-    end
 
-end
 
 function [H] = entropieTexte(texte)
     symboleUnique = unique(texte);

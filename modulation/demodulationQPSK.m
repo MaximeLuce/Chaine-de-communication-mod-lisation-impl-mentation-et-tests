@@ -1,6 +1,6 @@
 
 function [Y] = demodulationQPSK(y)
-    nus = 1000;   % Hz
+    nus = 10000;   % Hz
     fp = 200;    % Hz
     Db = 200;    % bits/s
     A = 1;
