@@ -1,4 +1,4 @@
-function [z] = modulationQPSK(m)
+function [z] = modulationQPSK_soft(m)
     nus = 10000;    % frequence d'echantillonnage (Hz)
     fp = 200;      % frequence porteuse (Hz)
     Db = 200;      % débit binaire (baud=1/sec)

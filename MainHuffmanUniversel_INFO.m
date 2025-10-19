@@ -17,7 +17,7 @@ addpath modulation\;
 parametres; % on importe les paramètres de parametres.m
 
 %% SOURCE PRINCIPALE
-m=['Bonjour '];
+m=['Bonjour adrien coucou'];
 
 disp('Message original:');
 disp(m);
@@ -99,10 +99,10 @@ disp(Ht_U);
 %% CODAGE DE CANAL
 
 disp("Message en sortie du codage canal");
-[MessageCodeCanal, doublon] = codageCanalH_7_2(MessageEncode);
+[MessageCodeCanal, doublon] = codageCanalH_7_4(MessageEncode);
 
 % On calcule l'entropie et le débit de la source
-rho_cc = 2/29; % car H(7,4)
+rho_cc = 4/7; % car H(7,4)
 
 H_X = rho_cc * H_U;
 disp('H(X) =');
@@ -115,7 +115,12 @@ disp(D_X);
 %% MODULATION + Ajout du bruit
 % DEBIT + bande passante + puissance de x (fixée)
 disp('Modulation et ajout du bruit BABG')
-y = modulationQPSK(MessageCodeCanal);
+
+
+
+y = modulationQPSK_soft(MessageCodeCanal);
+
+%y = modulationQPSK(MessageCodeCanal);
 
 % calcul de la capacité
 C = log2(exp(1))/2*log2(1 + Pmax/N0);
@@ -136,7 +141,8 @@ disp(D_C);
 %% DEMODULATION
 
 disp('Démodulation')
-Y = demodulationQPSK(y);
+Y = demodulationQPSK_soft(y);
+%Y = demodulationQPSK(y);
 
 %% CANAL D'INFORMATION - CBS
 
@@ -145,7 +151,7 @@ Pe_m=1/(2*N0)^(1/2); % calcul de l'erreur du CBS
 Pe = 0.16;
 
 % calcul de la capacité
-C_CBS = 1 - H2(Pe) % calcul de la capacité du canal d'information
+C_CBS = 1 - H2(Pe); % calcul de la capacité du canal d'information
 
 % pas de notion de "debit" pour le CBS
 
@@ -156,7 +162,7 @@ MessageY = applicationCBS(MessageCodeCanal, Pe);
 % on l'applique à Y (qui provient de la mod/demod) ou à MessageY (qui
 % provient du CBS)
 disp("Message en sortie du décodage canal")
-MessageDecodeCanal = decodageCanalH_7_2(Y, doublon);
+MessageDecodeCanal = decodageCanalH_7_4(Y, doublon);
 
 
 %% DECODAGE DE SOURCE

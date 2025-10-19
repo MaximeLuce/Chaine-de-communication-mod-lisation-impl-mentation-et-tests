@@ -25,7 +25,7 @@ function [Y] = demodulationQPSK(y)
         d = sqrt((x1 - x2)^2 + (y1 - y2)^2);
     end
     
-    function [min] = decision(x1,y1) % renvoie en sortie 0,1,2,3 selon le pt le plus proche
+    function [min] = decisionQPSK(x1,y1) % renvoie en sortie 0,1,2,3 selon le pt le plus proche
         L = [distance(x1, y1, 0.7071, 0.7071), distance(x1,y1, -0.7071, 0.7071), distance(x1,y1, -0.7071, -0.7071), distance(x1,y1, 0.7071, -0.7071)];
         min = 0; % ici, distance aux 4 pts du QPSK (circulaire)
         for n=[0,1,2,3]
@@ -38,7 +38,7 @@ function [Y] = demodulationQPSK(y)
     n = length(uz);
     nphaseprime = zeros(n,1);
     for i=[0:(n-1)]
-        nphaseprime(i+1) = decision(real(uz(i+1)),imag(uz(i+1)));
+        nphaseprime(i+1) = decisionQPSK(real(uz(i+1)),imag(uz(i+1)));
     end
     
     Y = str2num(reshape(dec2bin(nphaseprime,2)',2*Nsymb,1))';
