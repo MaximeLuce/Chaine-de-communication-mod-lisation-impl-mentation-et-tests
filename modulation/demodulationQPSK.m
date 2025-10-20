@@ -1,5 +1,5 @@
 
-function [Y] = demodulationQPSK(y, nus, fp, Db, A)
+function [Y, uznus] = demodulationQPSK(y, nus, fp, Db, A)
 
     Ts = 1/nus;    
     iim = 1i;

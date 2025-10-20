@@ -52,6 +52,6 @@ function [x, Ntot, z, t, u_shaped, delay] = modulationBPSK_RRC(m, nus, fp, Db, A
     x = real(u_shaped).*cos(2*pi*fp*t);
 
     % === Ajout de bruit (désactivé ici) ===
-    sigma2 = 1;
+    sigma2 = 0.1;
     z = x + sqrt(sigma2)*randn(1, length(x));
 end

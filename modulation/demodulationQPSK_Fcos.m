@@ -1,30 +1,31 @@
-function [Y, uznus, nrepet] = demodulationQPSK_soft(y, nus, fp, Db, A)
-  
+function [Y, uznus, nrepet] = demodulationQPSK_Fcos(y, nus, fp, Db, A, hcos2)
     Ts = 1/nus;
     iim = 1i;
     t = (0:length(y)-1)*Ts;
     Rs = Db/2;
     nrepet = round(nus/Rs);
-    Ntot = floor(numel(y)/nrepet)*nrepet;
-    Nsymb = Ntot / nrepet;
 
-    % demod
-    uznus = hilbert(y) .* exp(-iim*2*pi*fp*t);  % signal complexe à fréquence base
+    % --- Démodulation en bande de base ---
+    uznus = hilbert(y) .* exp(-iim*2*pi*fp*t); % signal complexe
 
-    % on regroupe par symb
-    uz_block = reshape(uznus(1:Ntot), nrepet, Nsymb);
+    % --- Filtrage adapté (cos²) ---
+    uz_filt = conv(uznus, hcos2, 'same');
 
-    % DECISION SOUPLE : on intégère sur Re et Im
+    % --- Extraction symbole ---
+    Nsymb = floor(numel(uz_filt)/nrepet);
+    uz_block = reshape(uz_filt(1:Nsymb*nrepet), nrepet, Nsymb);
+
+    % Intégration (décision douce)
     I_vals = sum(real(uz_block), 1);
     Q_vals = sum(imag(uz_block), 1);
 
-    % decision
+    % --- Décision ---
     nphaseprime = zeros(1, Nsymb);
     for i = 1:Nsymb
         nphaseprime(i) = decisionQPSK(I_vals(i), Q_vals(i));
     end
 
-    % on convertit les symb en bits
+    % --- Bits en sortie ---
     Y = str2num(reshape(dec2bin(nphaseprime,2)', 2*Nsymb, 1))';
 end
 

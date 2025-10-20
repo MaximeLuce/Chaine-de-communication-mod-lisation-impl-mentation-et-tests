@@ -1,4 +1,4 @@
-function [Y] = demodulationBPSK(y, nus, fp, Db, A)
+function [uz_block, Y] = demodulationBPSK(y, nus, fp, Db, A)
 
     Ts = 1/nus;    
     iim = 1i;

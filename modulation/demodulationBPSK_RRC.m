@@ -1,4 +1,4 @@
-function [m_reconstruit, ux_reconstruit, t, y_matched] = demodulationBPSK_RRC(z, nus, fp, Db, A, alpha)
+function [m_reconstruit, ux_reconstruit, t, y_matched, y_complex] = demodulationBPSK_RRC(z, nus, fp, Db, A, alpha)
 % Démodulation BPSK avec filtrage RRC adapté et compensation du délai
 %
 % Entrées :
@@ -28,6 +28,7 @@ function [m_reconstruit, ux_reconstruit, t, y_matched] = demodulationBPSK_RRC(z,
     % === Démodulation cohérente ===
     % Produit par la porteuse cosinus
     y_bb = z .* cos(2*pi*fp*t);   % signal bande de base (réel)
+    y_complex = z .* exp(-1j*2*pi*fp*t); 
     
     % === Filtre RRC ===
     rrcFilter = rcosdesign(alpha, span, nrepet, 'sqrt');
