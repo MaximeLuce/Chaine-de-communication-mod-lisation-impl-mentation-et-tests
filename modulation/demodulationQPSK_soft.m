@@ -11,24 +11,23 @@ function [Y] = demodulationQPSK_soft(y)
     Ntot = floor(numel(y)/nrepet)*nrepet;
     Nsymb = Ntot / nrepet;
 
-    % --- Démodulation IQ ---
+    % demod
     uznus = hilbert(y) .* exp(-iim*2*pi*fp*t);  % signal complexe à fréquence base
 
-    % --- Regroupement par symbole ---
+    % on regroupe par symb
     uz_block = reshape(uznus(1:Ntot), nrepet, Nsymb);
 
-    % --- Intégration sur chaque symbole ---
-    % Partie réelle (I) et imaginaire (Q)
+    % DECISION SOUPLE : on intégère sur Re et Im
     I_vals = sum(real(uz_block), 1);
     Q_vals = sum(imag(uz_block), 1);
 
-    % --- Décision ---
+    % decision
     nphaseprime = zeros(1, Nsymb);
     for i = 1:Nsymb
         nphaseprime(i) = decisionQPSK(I_vals(i), Q_vals(i));
     end
 
-    % --- Conversion symboles -> bits ---
+    % on convertit les symb en bits
     Y = str2num(reshape(dec2bin(nphaseprime,2)', 2*Nsymb, 1))';
 end
 

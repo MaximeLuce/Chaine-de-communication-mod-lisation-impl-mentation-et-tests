@@ -7,7 +7,7 @@ function [z] = modulationQPSK_soft(m)
     Ts = 1/nus; % periode d'echantillonnage (sec)
     iim = 1i;
     
-    % Mapping QPSK (2 bits/symbole)
+  
     Nsymb = numel(m)/2; % nombre de symboles dans le message
     
     msymbole = reshape(m,2,Nsymb); % sequence de symbole (matrice 2*Nsymb)
