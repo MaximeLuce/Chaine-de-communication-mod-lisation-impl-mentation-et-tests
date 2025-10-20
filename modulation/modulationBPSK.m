@@ -1,8 +1,4 @@
-function [z] = modulationBPSK(m)
-    nus = 5000;    % fréquence d'échantillonnage (Hz)
-    fp = 200;       % fréquence porteuse (Hz)
-    Db = 200;       % débit binaire (baud)
-    A = 1;          % amplitude du signal
+function [x, Ntot, z] = modulationBPSK(m, nus, fp, Db, A)
     
     Ts = 1/nus;     % période d'échantillonnage (sec)
     iim = 1i;       

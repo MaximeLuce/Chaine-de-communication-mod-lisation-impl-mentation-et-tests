@@ -99,10 +99,10 @@ disp(Ht_U);
 %% CODAGE DE CANAL
 
 disp("Message en sortie du codage canal");
-[MessageCodeCanal, doublon] = codageCanalH_7_4(MessageEncode);
+[MessageCodeCanal, doublon] = codageCanalH_7_2(MessageEncode);
 
 % On calcule l'entropie et le débit de la source
-rho_cc = 4/7; % car H(7,4)
+rho_cc = 2/29; % car H(7,4)
 
 H_X = rho_cc * H_U;
 disp('H(X) =');
@@ -117,22 +117,38 @@ disp(D_X);
 disp('Modulation et ajout du bruit BABG')
 
 
-nus = 1000;    % frequence d'echantillonnage (Hz)
-fp = 200;      % frequence porteuse (Hz)
+nus = 10000;    % frequence d'echantillonnage (Hz)
+fp = 100;      % frequence porteuse (Hz)
 Db = 200;      % débit binaire (baud=1/sec)
+B=100; % bande passante
 A = 1;         % amplitude du signal
 Ts=1/nus;
 
-[x,Ntot, y] = modulationQPSK_soft(MessageCodeCanal,nus, fp, Db, A);
+% QPSK
+alpha = 0.25;
+%[x, Ntot, z, t, u_shaped, delay] = modulationQPSK_soft_RRC(MessageCodeCanal, nus, fp, Db, A, alpha);
+%[x,Ntot, y] = modulationQPSK_soft(MessageCodeCanal,nus, fp, Db, A);
+
+% BPSK
+%[x, Ntot, y] = modulationBPSK(MessageCodeCanal, nus, fp, Db, A);
+[x, Ntot, y] = modulationBPSK_RRC(MessageCodeCanal, nus, fp, Db, A, alpha);
 
 t = (0:Ntot-1)*Ts;
-figure;
-plot(t,x);
-% figure;
-% plot([-N/2:N/2-1]/N*nus,abs(fftshift(fft(x))));
-% xlabel('frequence nu');
-% ylabel('module');
-% title('spectre X(nu) du signal émis');
+
+figure,
+plot([-Ntot/2:Ntot/2-1]/Ntot*nus,abs(fftshift(fft(x))));
+xlabel('frequence nu');
+ylabel('module');
+title('spectre X(nu) du signal émis');
+
+epaisseur_ligne = 2;
+xline(fp - B/2, '-m', 'LineWidth', epaisseur_ligne);
+xline(fp + B/2, '-m', 'LineWidth', epaisseur_ligne);
+
+xline(-fp - B/2, '-m', 'LineWidth', epaisseur_ligne);
+xline(-fp + B/2, '-m', 'LineWidth', epaisseur_ligne);
+
+yline(10^(-3),'-r', 'LineWidth', epaisseur_ligne);
 
 %y = modulationQPSK(MessageCodeCanal);
 
@@ -155,8 +171,19 @@ disp(D_C);
 %% DEMODULATION
 
 disp('Démodulation')
-Y = demodulationQPSK_soft(y,nus, fp, Db, A);
-%Y = demodulationQPSK(y);
+
+% QPSK
+%[Y, ux_hat, t_rx, y_bb] = demodulationQPSK_soft_RRC(z, nus, fp, Db, A, alpha);
+%Y = demodulationQPSK_soft(y,nus, fp, Db, A);
+%Y = demodulationQPSK(y,nus, fp, Db, A);
+
+% BPSK
+%Y = demodulationBPSK(y,nus, fp, Db, A);
+Y = demodulationBPSK_RRC(y,nus, fp, Db, A, alpha);
+
+% Vérification
+nb_errors = sum(MessageCodeCanal ~= Y);
+fprintf("Nombre d'erreurs : %d / %d bits (%.3f%%)\n", nb_errors, numel(MessageCodeCanal), 100*nb_errors/numel(MessageCodeCanal));
 
 %% CANAL D'INFORMATION - CBS
 
@@ -176,7 +203,7 @@ MessageY = applicationCBS(MessageCodeCanal, Pe);
 % on l'applique à Y (qui provient de la mod/demod) ou à MessageY (qui
 % provient du CBS)
 disp("Message en sortie du décodage canal")
-MessageDecodeCanal = decodageCanalH_7_4(Y, doublon);
+MessageDecodeCanal = decodageCanalH_7_2(Y, doublon);
 
 
 %% DECODAGE DE SOURCE

@@ -1,4 +1,4 @@
-function [z] = modulationQPSK(m, nus, fp, Db, A)
+function [x, Ntot, z] = modulationQPSK(m, nus, fp, Db, A)
     
     Ts = 1/nus; % periode d'echantillonnage (sec)
     iim = 1i;
