@@ -117,8 +117,22 @@ disp(D_X);
 disp('Modulation et ajout du bruit BABG')
 
 
+nus = 1000;    % frequence d'echantillonnage (Hz)
+fp = 200;      % frequence porteuse (Hz)
+Db = 200;      % débit binaire (baud=1/sec)
+A = 1;         % amplitude du signal
+Ts=1/nus;
 
-y = modulationQPSK_soft(MessageCodeCanal);
+[x,Ntot, y] = modulationQPSK_soft(MessageCodeCanal,nus, fp, Db, A);
+
+t = (0:Ntot-1)*Ts;
+figure;
+plot(t,x);
+% figure;
+% plot([-N/2:N/2-1]/N*nus,abs(fftshift(fft(x))));
+% xlabel('frequence nu');
+% ylabel('module');
+% title('spectre X(nu) du signal émis');
 
 %y = modulationQPSK(MessageCodeCanal);
 
@@ -141,7 +155,7 @@ disp(D_C);
 %% DEMODULATION
 
 disp('Démodulation')
-Y = demodulationQPSK_soft(y);
+Y = demodulationQPSK_soft(y,nus, fp, Db, A);
 %Y = demodulationQPSK(y);
 
 %% CANAL D'INFORMATION - CBS

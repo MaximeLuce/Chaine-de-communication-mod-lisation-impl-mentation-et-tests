@@ -1,8 +1,5 @@
-function [Y] = demodulationQPSK_soft(y)
-    nus = 10000; % Hz
-    fp = 200;    % Hz
-    Db = 200;    % bits/s
-    A = 1;
+function [Y] = demodulationQPSK_soft(y, nus, fp, Db, A)
+  
     Ts = 1/nus;
     iim = 1i;
     t = (0:length(y)-1)*Ts;

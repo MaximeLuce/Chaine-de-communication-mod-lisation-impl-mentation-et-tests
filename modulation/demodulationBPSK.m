@@ -1,8 +1,4 @@
-function [Y] = demodulationBPSK(y)
-    nus = 5000;   % fréquence d'échantillonnage (Hz)
-    fp = 200;      % fréquence porteuse (Hz)
-    Db = 200;      % débit binaire (bits/s)
-    A = 1;         % amplitude du signal
+function [Y] = demodulationBPSK(y, nus, fp, Db, A)
 
     Ts = 1/nus;    
     iim = 1i;
