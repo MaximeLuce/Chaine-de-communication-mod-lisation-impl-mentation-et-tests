@@ -1,6 +1,6 @@
-%% CODAGE DU CANAL H(7,2)
+%% CODAGE DU CANAL H(10,2)
 
-% Fonction appliquant le codage canal H(7,2) sur le message entré. Découpe
+% Fonction appliquant le codage canal H(10,2) sur le message entré. Découpe
 % le message selon des morceaux de longueur k et code les blocs avant de
 % les assembler à nouveau
 %
@@ -11,8 +11,8 @@
 %           cas, le codage canal ajoute un bit (ici 0) pour compléter le
 %           couple et le coder de la même façon
 
-function [rho_cc,messageRobuste, doublon] = codageCanalH_7_2(message)
-    G = [1 0 1 0 1 0 1; 0 1 0 1 0 1 1];         % Matrice génératrice
+function [rho_cc,messageRobuste, doublon] = codageCanalH_10_2(message)
+    G = [1 0 1 0 1 0 1 0 1 0; 0 1 0 1 0 1 0 1 0 1];         % Matrice génératrice
 
     % S'assure que 'message' est un vecteur ligne binaire
     message = message(:).'; 
@@ -44,7 +44,7 @@ end
 % Sorties : code => matrice ligne contenant bits codé via la génératrice G
 
 function code = codage(bits, G)
-    [k, ~] = size(G);                   % k = nb de bits par bloc
+    [k, n] = size(G);                   % k = nb de bits par bloc
     blocs = reshape(bits, k, [])';      % découpe en blocs de k bits
     code = mod(blocs * G, 2)';          % multiplication binaire via mod
     code = code(:)';                    % remise en forme ligne de code

@@ -11,7 +11,7 @@
 %           cas, le codage canal ajoute un bit (ici 0) pour compléter le
 %           couple et le coder de la même façon
 
-function [messageRobuste, doublon] = codageCanal(message)
+function [rho_cc, messageRobuste, doublon] = codageCanalH_7_4(message)
     n = 7;
     k = 4;
     r = n - k;
@@ -30,11 +30,12 @@ function [messageRobuste, doublon] = codageCanal(message)
 
     messageRobuste = codage(message, G);
     doublon = mod(lMessage, k);
+    rho_cc = k/n;
 end
 
 % Fonction codée avant la découverte de l'existence de reshape. Ne sert
 % plus à rien, mais on se sentait trop bêtes après l'avoir découverte donc
-% on l'a gardée dans H(7,4)
+% on l'a gardée dans H(7,4).
 
 function [decoupe] = decoupage(octets) %les bits supp sont supposés appartenant à la chaine d'après
     l = length(octets);

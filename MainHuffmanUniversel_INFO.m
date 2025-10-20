@@ -99,7 +99,7 @@ disp(Ht_U);
 %% CODAGE DE CANAL
 
 disp("Message en sortie du codage canal");
-[MessageCodeCanal, doublon] = codageCanalH_7_2(MessageEncode);
+[rho_cc, MessageCodeCanal, doublon] = codageCanalH_7_2(MessageEncode);
 
 % On calcule l'entropie et le débit de la source
 rho_cc = 2/29; % car H(7,4)

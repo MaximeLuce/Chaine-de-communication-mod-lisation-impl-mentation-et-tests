@@ -11,7 +11,7 @@
 %           cas, le codage canal ajoute un bit (ici 0) pour compléter le
 %           couple et le coder de la même façon
 
-function [messageRobuste, doublon] = codageCanal(message)
+function [rho_cc,messageRobuste, doublon] = codageCanalH_5_2(message)
     G = [1 0 1 0 1; 0 1 0 1 1];         % Matrice génératrice
 
     % S'assure que 'message' est un vecteur ligne binaire
@@ -31,6 +31,7 @@ function [messageRobuste, doublon] = codageCanal(message)
     % Codage bloc (sur GF(2))
     messageRobuste = codage(message, G);
     doublon = r;
+    rho_cc = k/n;
 end
 
 

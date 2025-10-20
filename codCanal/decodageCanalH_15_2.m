@@ -1,4 +1,4 @@
-%% DECODAGE DU CANAL H(5,2)
+%% DECODAGE DU CANAL H(15,2)
 
 
 % Fonction de décodage canal permettant, avec un message récupéré contenant
@@ -10,15 +10,15 @@
 %           doublon => valeur valant 1 si la longueur du message envoyé est
 %           impaire
 %
-% Sorties : messageDecode => message décodé et corrigé via H(5,2) et G
+% Sorties : messageDecode => message décodé et corrigé via H(15,2) et G
 %           donné
 
-function [messageDecode] = decodageCanalH_5_2(messageCode, doublon)
-    G = [1 0 1 0 1; 0 1 0 1 1];     % Matrice génératrice
+function [messageDecode] = decodageCanalH_15_2(messageCode, doublon)
+    G = [1 0 1 0 1 0 1 0 1 0 1 0 1 0 1; 0 1 0 1 0 1 0 1 0 1 0 1 0 1 1];
 
     messageCode = messageCode(:).';
 
-    [k, n] = size(G);
+    [~, n] = size(G);
     l = numel(messageCode);
     nbBlocs = floor(l/n);
 
@@ -65,21 +65,21 @@ end
 % valeurs réellement possibles (trouvées manuellement). Utilise la distance
 % de Manhattan pour la comparaison.
 %
-% Entrées : element => matrice ligne de 5 élts à corriger
+% Entrées : element => matrice ligne de 15 élts à corriger
 %
 % Sorties : corrige => élément le plus proche de la liste l_possibles
 
 function [corrige] = correction(element)
 
-    l_possibles = [0 0 0 0 0; 
-                   0 1 0 1 1; 
-                   1 0 1 0 1; 
-                   1 1 1 1 0];      % dépend de G
+    l_possibles = [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 
+                   0 1 0 1 0 1 0 1 0 1 0 1 0 1 1; 
+                   1 0 1 0 1 0 1 0 1 0 1 0 1 0 1; 
+                   1 1 1 1 1 1 1 1 1 1 1 1 1 1 0];      % dépend de G
 
-    corrige = [0 0 0 0 0];          % initialisé par le premier terme
-    d_min = 5;                      % initialisé à la distance max possible
+    corrige = [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0];          % initialisé par le premier terme
+    d_min = 15;                               % initialisé à la distance max possible
 
-    for i=1:4                       % boucle d'étude et de correction
+    for i=1:4                                 % boucle d'étude et de correction
         dist = distance(l_possibles(i,:),element);
 
         if dist < d_min
