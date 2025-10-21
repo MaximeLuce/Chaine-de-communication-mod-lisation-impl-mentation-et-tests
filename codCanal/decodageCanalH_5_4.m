@@ -1,4 +1,6 @@
-%% DECODAGE DU CANAL H(15,2)
+
+
+%% DECODAGE DU CANAL H(5,4)
 
 
 % Fonction de décodage canal permettant, avec un message récupéré contenant
@@ -10,11 +12,14 @@
 %           doublon => valeur valant 1 si la longueur du message envoyé est
 %           impaire
 %
-% Sorties : messageDecode => message décodé et corrigé via H(15,2) et G
+% Sorties : messageDecode => message décodé et corrigé via H(5,4) et G
 %           donné
 
-function [messageDecode] = decodageCanalH_15_2(messageCode, doublon)
-    G = [1 0 1 0 1 0 1 0 1 0 1 0 1 0 1; 0 1 0 1 0 1 0 1 0 1 0 1 0 1 1];
+function [messageDecode] = decodageCanalH_5_4(messageCode, doublon)
+    G = [1 0 0 0 1;
+         0 1 0 0 1;
+         0 0 1 0 1;
+         0 0 0 1 1];         % Matrice génératrice
 
     messageCode = messageCode(:).';
 
@@ -28,7 +33,7 @@ function [messageDecode] = decodageCanalH_15_2(messageCode, doublon)
 
     for i=1:nbBlocs
         Mcorr(i,:) = correction(M(i,:));
-        messageDecode = [messageDecode Mcorr(i,1) Mcorr(i,2)];
+        messageDecode = [messageDecode Mcorr(i,1) Mcorr(i,2) Mcorr(i,3) Mcorr(i,4)];
         % Récupération des deux premiers termes (I2 dans G), qui
         % correspondent aux deux bits envoyés en entrée. A modifier si G
         % est changée
@@ -71,13 +76,25 @@ end
 
 function [corrige] = correction(element)
 
-    l_possibles = [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 
-                   0 1 0 1 0 1 0 1 0 1 0 1 0 1 1; 
-                   1 0 1 0 1 0 1 0 1 0 1 0 1 0 1; 
-                   1 1 1 1 1 1 1 1 1 1 1 1 1 1 0];      % dépend de G
+    l_possibles = [0 0 0 0 0; 
+                   0 0 0 1 1; 
+                   0 0 1 0 1;
+                   0 0 1 1 0;
+                   0 1 0 0 1;
+                   0 1 0 1 0;
+                   0 1 1 0 0;
+                   0 1 1 1 1;
+                   1 0 0 0 1;
+                   1 0 0 1 0;
+                   1 0 1 0 0;
+                   1 0 1 1 1;
+                   1 1 0 0 0;
+                   1 1 0 1 1;
+                   1 1 1 0 1;
+                   1 1 1 1 0];      % dépend de G
 
-    corrige = [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0];          % initialisé par le premier terme
-    d_min = 15;                               % initialisé à la distance max possible
+    corrige = [0 0 0 0 0];                   % initialisé par le premier terme
+    d_min = 5;                               % initialisé à la distance max possible
 
     for i=1:4                                 % boucle d'étude et de correction
         dist = distance(l_possibles(i,:),element);
@@ -89,3 +106,4 @@ function [corrige] = correction(element)
     end
 
 end
+

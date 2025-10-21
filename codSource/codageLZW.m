@@ -1,15 +1,19 @@
 function [compressed] = codageLZW(input_text)
 
-    % Initialisation du dictionnaire avec tous les caractères possibles
-    dict = containers.Map;
-    symbols = [' ','a':'z'];
+    % Initialisation du dictionnaire avec tous les caractères possibles.
+    % Le dico est fait pour être adaptatif. Pour le changer, penser à le
+    % changer dans decodageLZW également. ATTENTION au nombre de bits qui
+    % peut être limitant ! Voir rapport
 
-    for i = 1:27
+    dict = containers.Map;
+    symbols = [' ','a':'z','A':'Z','?','.',',','!',';'];
+
+    for i = 1:length(symbols)
         dict(symbols(i)) = i; % Mise en place du dico
     end
-    nextCode = length(symbols) + 1; 
 
-    % Variables
+    nextCode = length(symbols) + 1;
+
     w = '';               % Chaîne courante
     compressed = [];      % Résultat final
 
@@ -27,17 +31,17 @@ function [compressed] = codageLZW(input_text)
             dict(wc) = nextCode;
             nextCode = nextCode + 1;
             
-            w = c;
+            w = c; % Reset du w courant
         end
     end
 
-    % Ajouter le dernier code
+    % Cas dernier élément
     if ~isempty(w)
         compressed(end+1) = dict(w);
     end
     
-    converted = dec2bin(compressed,8);
-    compressed = reshape(converted', 1, []);
-    
-   
+    converted = dec2bin(compressed,8);       % Conversion sur 8 bits.
+    % Longueur maximale de texte garantissant 0 erreurs : 198 caractères
+
+    compressed = reshape(converted', 1, []); % Remise en forme des données
 end

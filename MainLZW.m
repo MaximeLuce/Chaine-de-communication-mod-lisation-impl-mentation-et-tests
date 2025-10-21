@@ -18,19 +18,17 @@ addpath demodulation\;
 parametres; % on importe les paramètres de parametres.m
 
 %% SOURCE PRINCIPALE
-m='coucou';
+m='Ceci est un test ?!';
 
-disp('Message original:');
+disp('Message :');
 disp(m);
 
 % TRAITEMENT
-disp('Message filtré:');
-messageFiltre = verifCaractere(m)
 
 %% CODAGE DE SOURCE
 
-% on code le message en arithmetique
-MessageEncode = codageLZW(messageFiltre);
+% on code le message en LZW
+MessageEncode = codageLZW(m);
 
 disp("Message codé");
 disp(MessageEncode);
@@ -39,7 +37,7 @@ disp(MessageEncode);
 %% CODAGE DE CANAL
 
 disp("Message en sortie du codage canal");
-[MessageCodeCanal, doublon] = codageCanalH_7_4(MessageEncode);
+[rho_cc,MessageCodeCanal, doublon] = codageCanalH_7_2(MessageEncode);
 disp(MessageCodeCanal)
 
 size(MessageCodeCanal)
@@ -62,21 +60,19 @@ Pe = 0;
 
 C_CBS = 1 - H2(Pe); % calcul de la capacité du canal d'information
 
-MessageY = applicationCBS(MessageCodeCanal, Pe);
-%T2 = table(mC, MessageY)<
+MessageY = applicationCBS(MessageCodeCanal, Pe)
 
 %% DECODAGE CANAL
 % on l'applique à Y (qui provient de la mod/demod) ou à MessageY (qui
 % provient du CBS)
 disp("Message en sortie du décodage canal")
-MessageDecodeCanal = decodageCanal(MessageY, doublon);
-disp(MessageDecodeCanal')
+MessageDecodeCanal = decodageCanalH_7_2(MessageY, doublon);
+disp(MessageDecodeCanal)
 
 
-%% DECODAGE DE SOURCE
+%% DECODAGE DE SOURCE<
 
-% on decode en ASCII
-MessageDecode = decodageLZW(MessageDecodeCanal)
+MessageDecode = decodageLZW(MessageDecodeCanal);
 %table(MessageEncode, MessageDecode);
 disp("Message décodé :")
 disp(MessageDecode)
