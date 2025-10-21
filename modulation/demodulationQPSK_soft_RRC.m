@@ -16,6 +16,10 @@ function [m_reconstruit, ux_reconstruit, t, y_matched, y_bb] = demodulationQPSK_
     Ts = 1/nus;
     Rs = Db/2;
     nrepet = round(nus / Rs);
+    if mod(nrepet,2) ~= 0
+        nrepet = nrepet + 1; % rend pair
+    end
+
     span = 1;
     delay = (span/2) * nrepet;
 

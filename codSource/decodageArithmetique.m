@@ -1,8 +1,7 @@
-function [decoded] = decodageArithmetique(code, symbols, probs, cum_probs)
+function [decoded] = decodageArithmetique(code, symbols, probs, cum_probs, L)
     %L = (length(code) - mod(length(code),4))/4+1
     code = BinToFloat(code);
-    rangZero = detecterZero(code)
-    L=9;
+    rangZero = detecterZero(code);
     %code = 0.289861042869181
 
     % longueur du message à décoder
@@ -48,15 +47,15 @@ function [code] = BinToFloat(codeBinaire)
         decimales(i) = groupBits(1)*8 + groupBits(2)*4 + groupBits(3)*2 + groupBits(4)*1;
     end
     
-    m = length(decimales)
+    m = length(decimales);
     s = '0.';
 
     for i = 1:m
-        s = append(s,num2str(decimales(i)))
+        s = append(s,num2str(decimales(i)));
     end
 
     % Concaténation des chiffres pour former un string
-    code = str2num(s)
+    code = str2num(s);
 end
 
 function[c] = detecterZero(code)

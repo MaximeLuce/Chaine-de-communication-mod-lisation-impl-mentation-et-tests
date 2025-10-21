@@ -1,5 +1,5 @@
-function [code] = codageArithmetique(message, symbols, probs, cum_probs) 
-    
+function [code, L] = codageArithmetique(message, symbols, probs, cum_probs) 
+    L = numel(message);
     % Initialisation
     low = 0;
     high = 1;
@@ -13,11 +13,11 @@ function [code] = codageArithmetique(message, symbols, probs, cum_probs)
     end
     
     % Code final (dans [low, high))
-    code = (low + high) / 2
+    code = (low + high) / 2;
 
-    rang = detection(low,high)
+    rang = detection(low,high);
     
-    code = FloatToBin(code,rang)
+    code = FloatToBin(code,rang);
 end
 
 function [codeBinaire] = FloatToBin(code,rang)

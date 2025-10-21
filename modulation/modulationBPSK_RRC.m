@@ -1,57 +1,60 @@
-function [x, Ntot, z, t, u_shaped, delay] = modulationBPSK_RRC(m, nus, fp, Db, A, alpha)
-% modulationBPSK_RRC : Modulation BPSK avec filtrage RRC
+function [x, Ntot, z, b, nrepet, Nsymb, group_delay, orig_len, padded] = modulationBPSK_RRC(m, nus, fp, Db, A, rolloff, span)
+% modulationBPSK_RRC
+% Modulation BPSK avec filtrage Root Raised Cosine (RRC)
+%
 % Entrées :
-%   m      : séquence binaire (0/1)
-%   nus    : fréquence d'échantillonnage (Hz)
-%   fp     : fréquence porteuse (Hz)
-%   Db     : débit binaire (bit/s)
-%   A      : amplitude du signal BPSK
-%   alpha  : facteur de roll-off du filtre RRC
+%   m        : bits d'entrée (0/1)
+%   nus      : fréquence d'échantillonnage (Hz)
+%   fp       : fréquence porteuse (Hz)
+%   Db       : débit binaire (bits/s)
+%   A        : amplitude des symboles
+%   rolloff  : facteur de rolloff du filtre RRC
+%   span     : durée du filtre en symboles
 %
 % Sorties :
-%   x         : signal modulé réel (RF)
-%   Ntot      : nombre total d'échantillons du signal
-%   z         : signal bruité (actuellement bruit désactivé)
-%   t         : vecteur temporel (s)
-%   u_shaped  : signal BPSK filtré par le RRC (complexe)
-%   delay     : délai introduit par le filtre (en échantillons)
+%   x            : signal modulé réel (après RRC et porteuse)
+%   Ntot         : longueur totale du signal modulé
+%   z            : signal modulé bruité (AWGN sigma^2=1)
+%   b            : coefficients du filtre RRC
+%   nrepet       : échantillons par symbole
+%   Nsymb        : nombre de symboles
+%   group_delay  : délai total émetteur+récepteur (en échantillons)
+%   orig_len     : longueur initiale du message
+%   padded       : indicateur de padding (toujours 0 ici)
 
-    Ts = 1/nus;  % période d'échantillonnage
-    iim = 1i;    % unité imaginaire (utile pour cohérence avec QPSK)
+    orig_len = numel(m);
+    padded = 0;
 
-    % === Mapping BPSK ===
-    % 0 → +A, 1 → -A
-    Nsymb = numel(m);
-    ux = A * (1 - 2*m);  % symboles BPSK sur l'axe réel
+    Ts = 1 / nus;
 
-    % === Paramètres temporels ===
-    Rs = Db;  % débit symbole = débit binaire
+    % --- mapping BPSK ---
+    ux = A * (1 - 2*m(:)).';  % vecteur ligne, 0->+A, 1->-A
+    Nsymb = numel(ux);
+
+    % --- échantillons par symbole ---
+    Rs = Db;
     nrepet = round(nus / Rs);
-    span = 6; % durée du filtre RRC en symboles
 
-    % === Suréchantillonnage ===
+    % --- filtre RRC ---
+    b = rcosdesign(rolloff, span, nrepet, 'sqrt'); % Root Raised Cosine
+
+    % --- suréchantillonnage ---
     u_ups = upsample(ux, nrepet);
 
-    % === Filtre RRC ===
-    rrcFilter = rcosdesign(alpha, span, nrepet, 'sqrt');
-    rrcFilter = rrcFilter / norm(rrcFilter); % normalisation énergétique
+    % --- mise en forme (filtrage émetteur RRC) ---
+    x_baseband = conv(u_ups, b, 'full');
 
-    % === Filtrage de mise en forme ===
-    u_shaped = conv(u_ups, rrcFilter, 'full');
-
-    % === Délai du filtre ===
-    delay = (span/2) * nrepet;
-
-    % === Troncature pour enlever le retard ===
-    u_shaped = u_shaped(delay+1:end-delay);
-
-    % === Signal RF ===
-    Ntot = numel(u_shaped);
+    % --- modulation sur porteuse ---
+    Ntot = numel(x_baseband);
     t = (0:Ntot-1) * Ts;
-    % BPSK : seule la partie réelle est utilisée
-    x = real(u_shaped).*cos(2*pi*fp*t);
+    x = real(x_baseband) .* cos(2*pi*fp*t);
 
-    % === Ajout de bruit (désactivé ici) ===
-    sigma2 = 0.1;
+    % --- bruit AWGN simple ---
+    sigma2 = 1;
     z = x + sqrt(sigma2)*randn(1, length(x));
+
+    % --- délai de groupe total (émetteur + récepteur) ---
+    % filtre longueur Lb = span*nrepet +1
+    % RRC émetteur + RRC récepteur -> group_delay = span*nrepet
+    group_delay = span * nrepet;
 end

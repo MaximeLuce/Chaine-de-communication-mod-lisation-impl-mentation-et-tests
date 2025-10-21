@@ -40,7 +40,11 @@ function [x, Ntot, z, t, u_shaped, delay] = modulationQPSK_soft_RRC(m, nus, fp, 
     % === Paramètres temporels ===
     Rs = Db/2;
     nrepet = round(nus / Rs);
-    span = 1; % durée du filtre (en symboles)
+    if mod(nrepet,2) ~= 0
+        nrepet = nrepet + 1; % rend pair
+    end
+
+    span = 6; % durée du filtre (en symboles)
 
     % === Suréchantillonnage ===
     u_ups = upsample(ux, nrepet);

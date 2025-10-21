@@ -3,11 +3,11 @@ function [messageEncode] = codageASCII(message)
     if any(message > 127)
         error('Le message contient des caractères non ASCII.');
     end
-    messageEncode = dec2bin(message);
 
+    % Conversion ASCII → binaire sur 8 bits
+    messageEncode = dec2bin(message, 8);
+
+    % Mise à plat (transforme la matrice en un vecteur ligne)
     messageEncode = reshape(messageEncode.', 1, []);
     messageEncode = messageEncode - '0';
 end
-
-
-
