@@ -21,4 +21,4 @@ for i = 1:Ntest
     resultat(i) = nb_erreurs/length(MessageDecode);
 end
 
-moyenne_pourcentage = sum(resultat)/Ntest
+moyenne_pourcentage = sum(resultat)/Ntest;c
