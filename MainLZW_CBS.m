@@ -41,7 +41,6 @@ disp(Ht_S);
 MessageEncode = codageLZW(m);
 
 disp("Message codé");
-disp(MessageEncode);
 
 
 L = 8
@@ -69,36 +68,26 @@ disp(Ht_U);
 
 disp("Message en sortie du codage canal");
 [rho_cc,MessageCodeCanal, doublon] = codageCanalH_15_2(MessageEncode);
-disp(MessageCodeCanal)
-
-size(MessageCodeCanal)
-%% MODULATION + Ajout du bruit
-% DEBIT + bande passante + puissance de x (fixée)
-%y = modulationQPSK(MessageCodeCanal)
-
-%size(y)
-
-%% DEMODULATION
-
-%Y = demodulationQPSK(y)
 
 %% CANAL D'INFORMATION - CBS
 
 % calcul de l'erreur du CBS
 Pe_m=1/(2*N0)^(1/2); 
 %Pe = 2*erfc(1/(2*N0)^(1/2));
-Pe = 0.1;
+Pe = 0.14;
 
-C_CBS = 1 - H2(Pe); % calcul de la capacité du canal d'information
+C_CBS = 1 - H2(Pe) % calcul de la capacité du canal d'information
+B=100;
+M=4;
 
-MessageY = applicationCBS(MessageCodeCanal, Pe)
+D_C = B*log2(M)
+MessageY = applicationCBS(MessageCodeCanal, Pe);
 
 %% DECODAGE CANAL
 % on l'applique à Y (qui provient de la mod/demod) ou à MessageY (qui
 % provient du CBS)
 disp("Message en sortie du décodage canal")
 MessageDecodeCanal = decodageCanalH_15_2(MessageY, doublon);
-disp(MessageDecodeCanal)
 
 
 %% DECODAGE DE SOURCE<
