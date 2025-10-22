@@ -5,13 +5,13 @@ addpath utilitaires\;
 Ntest = 1000;
 resultat = zeros(Ntest,1);
 
-Pe = 0.04;
+Pe = 0.16;
 
 for i = 1:Ntest
     MessageSource = randi([0 1], 1, 1000);
-    [w,MessageCode,doublon] = codageCanalH_29_2(MessageSource);
+    MessageCode = codageCanalConv(MessageSource);
     MessageRecu = applicationCBS(MessageCode, Pe);
-    MessageDecode = decodageCanalH_29_2(MessageRecu,doublon);
+    [~,MessageDecode] = decodageCanalConv(MessageRecu);
     nb_erreurs = 0;
     for j = 1 : numel(MessageDecode)
         if MessageDecode(j)~= MessageSource(j)
