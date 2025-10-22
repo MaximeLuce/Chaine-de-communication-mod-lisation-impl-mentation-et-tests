@@ -133,7 +133,7 @@ function [u_hat, u_hat_nottail] = decodageCanalConv(y)
 end
 
 
-u = [1 0 1 1 0 0 1 0 1 1 0 0 0 1 0 1]
+u = [1 0]
 y = codageCanalConv(u);
 [Z1,z2] = decodageCanalConv(y);
 z2

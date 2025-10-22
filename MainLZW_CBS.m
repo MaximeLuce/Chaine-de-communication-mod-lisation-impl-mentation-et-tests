@@ -69,12 +69,15 @@ disp(Ht_U);
 disp("Message en sortie du codage canal");
 [rho_cc,MessageCodeCanal, doublon] = codageCanalH_15_2(MessageEncode);
 
+% Modifier les valeurs 15 et 2 selon le traitement souhaité. Attention à
+% modifier également dans decodageCanal.
+
 %% CANAL D'INFORMATION - CBS
 
 % calcul de l'erreur du CBS
-Pe_m=1/(2*N0)^(1/2); 
+% Pe_m=1/(2*N0)^(1/2); 
 %Pe = 2*erfc(1/(2*N0)^(1/2));
-Pe = 0.14;
+Pe = 0.14; % Probabilité d'erreur
 
 C_CBS = 1 - H2(Pe) % calcul de la capacité du canal d'information
 B=100;

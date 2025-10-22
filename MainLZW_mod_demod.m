@@ -149,7 +149,8 @@ MessageY = applicationCBS(MessageCodeCanal, Pe);
 
 %% DECODAGE CANAL
 % on l'applique à Y (qui provient de la mod/demod) ou à MessageY (qui
-% provient du CBS)
+% provient du CBS). A modifier dans les entrées de decodageCanal selon ce 
+% qu'on souhaite calculer
 disp("Message en sortie du décodage canal")
 MessageDecodeCanal = decodageCanalH_29_2(Y, doublon);
 
